@@ -16,8 +16,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
-@SpringBootApplication(scanBasePackages = { "ru.rik.services" })
+http://www.devthoughts.pl/2016/08/02/datajpatest-from-spring-boot/
+@SpringBootApplication(scanBasePackages = { "ru.rik.bwl.service" })
 public class BwlApplication implements ApplicationRunner {
 	private static final Logger logger = LoggerFactory.getLogger(BwlApplication.class);
 

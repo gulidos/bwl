@@ -25,7 +25,7 @@ public class BwlScript extends BaseAgiScript {
 			logger.info("reject");
 		else 
 			logger.info("allow");
-		
+		channel.setContext("fortis");
 		
 		hangup();
 	}
