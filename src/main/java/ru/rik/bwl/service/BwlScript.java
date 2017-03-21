@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class BwlScript extends BaseAgiScript {
 	private static final Logger logger = LoggerFactory.getLogger(BwlScript.class);
+	
 	@Autowired ShortBuff shortBuff;
+	@Autowired WlRepo wlrepo;
 	
 	public BwlScript() {
 		System.out.println("Bwl Asterisk creating");
@@ -20,14 +22,26 @@ public class BwlScript extends BaseAgiScript {
 
 	@Override
 	public void service(AgiRequest request, AgiChannel channel) throws AgiException {
-		logger.info(request.toString());
-		if (shortBuff.in(request.getExtension()))
-			logger.info("reject");
-		else 
-			logger.info("allow");
-		channel.setContext("fortis");
+		String peerName = channel.getVariable("CHANNEL(peername)");
+		String ip = channel.getVariable("CHANNEL(peerip)");
+		logger.info("{} peer {} ip {}", request.toString(), peerName, ip);
+		channel.getVariable("peername");
+	
+		if (shortBuff.in(request.getExtension())) {
+			logger.info("reject {} too early", request.getExtension());
+			hangup();
+			return;
+		}	
 		
-		hangup();
+		if (wlrepo.findOne(request.getExtension()) != null) {
+			logger.info("allow {}  exists in wl", request.getExtension());	
+			channel.setContext("a2billing");
+		} else {
+			logger.info("not allow {} not in wl", request.getExtension());		
+			hangup();
+
+		}		
 	}
+	
 
 }

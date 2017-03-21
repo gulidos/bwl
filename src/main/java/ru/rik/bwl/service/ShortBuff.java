@@ -42,7 +42,7 @@ public class ShortBuff {
 	
 	
 	public String getStat() {
-		return cache.stats().toString();
+		return cache.stats().toString() + " size: " + cache.estimatedSize() ;
 	}
 
 }

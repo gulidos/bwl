@@ -14,10 +14,12 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
-http://www.devthoughts.pl/2016/08/02/datajpatest-from-spring-boot/
+
 @SpringBootApplication(scanBasePackages = { "ru.rik.bwl.service" })
+@EnableCaching
 public class BwlApplication implements ApplicationRunner {
 	private static final Logger logger = LoggerFactory.getLogger(BwlApplication.class);
 
@@ -27,6 +29,7 @@ public class BwlApplication implements ApplicationRunner {
 		DefaultAgiServer srv = new DefaultAgiServer(script);
 		srv.setAddress(InetAddress.getByName("localhost"));
 		AgiServerThread thread = new AgiServerThread(srv);
+		
 		thread.startup();
 		return thread; 
 	}
