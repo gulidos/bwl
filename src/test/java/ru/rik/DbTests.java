@@ -9,6 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import ru.rik.bwl.BwlApplication;
+import ru.rik.bwl.service.PortRepo;
 import ru.rik.bwl.service.WlRepo;
 
 @RunWith(SpringRunner.class)
@@ -17,6 +18,7 @@ import ru.rik.bwl.service.WlRepo;
 public class DbTests {
 	
 @Autowired WlRepo wls;
+@Autowired PortRepo ports;
 
 	@Test
 	public void testWlCountOk() {
@@ -32,6 +34,14 @@ public class DbTests {
 	public void getWlNotExists() {
 		Assert.assertNull( wls.findOne("01234567800"));
 	}
-
-
+	
+	@Test
+	public void getPortCount() {
+		Assert.assertTrue(ports.count() > 0);
+	}
+	
+	@Test
+	public void findPortByNumber() {
+		Assert.assertNotNull(ports.findOne("9000000000")); 
+	}			
 }

@@ -9,38 +9,44 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ru.rik.bwl.domain.Port;
+
 @Component
 public class BwlScript extends BaseAgiScript {
 	private static final Logger logger = LoggerFactory.getLogger(BwlScript.class);
 	
 	@Autowired ShortBuff shortBuff;
 	@Autowired WlRepo wlrepo;
+	@Autowired PortRepo ports;
 	
 	public BwlScript() {
 		System.out.println("Bwl Asterisk creating");
 	}
 
 	@Override
-	public void service(AgiRequest request, AgiChannel channel) throws AgiException {
-		String peerName = channel.getVariable("CHANNEL(peername)");
-		String ip = channel.getVariable("CHANNEL(peerip)");
-		logger.info("{} peer {} ip {}", request.toString(), peerName, ip);
-		channel.getVariable("peername");
+	public void service(AgiRequest r, AgiChannel ch) throws AgiException {
+		String exten = r.getExtension();
+		String src = r.getCallerIdNumber();
+		String peer = ch.getVariable("CHANNEL(peername)");
 	
-		if (shortBuff.in(request.getExtension())) {
-			logger.info("reject {} too early", request.getExtension());
+		if (shortBuff.in(exten)) {
+			logger.info("peer:{} src:{} dst:{} reject too early", peer, src, exten);
 			hangup();
 			return;
 		}	
 		
-		if (wlrepo.findOne(request.getExtension()) != null) {
-			logger.info("allow {}  exists in wl", request.getExtension());	
-			channel.setContext("a2billing");
-		} else {
-			logger.info("not allow {} not in wl", request.getExtension());		
+		if (wlrepo.findOne(r.getExtension()) == null) {
+			logger.info("peer:{} src:{} dst:{} reject is not whitelisted", peer, src, exten);
 			hangup();
-
-		}		
+			return;
+		} 	
+		
+		Port p = ports.findOne(exten.substring(1));
+		if (p != null) 
+			ch.setExtension(p.getMncFormatted() + exten);
+		
+		logger.info("peer:{} src:{} dst:{} allow whitelisted", peer, src, exten);
+		ch.setContext("a2billing");
 	}
 	
 
