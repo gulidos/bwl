@@ -29,10 +29,12 @@ public class BwlApplication implements ApplicationRunner {
 		DefaultAgiServer srv = new DefaultAgiServer(script);
 		srv.setAddress(InetAddress.getByName("localhost"));
 		AgiServerThread thread = new AgiServerThread(srv);
-		
+		 
 		thread.startup();
 		return thread; 
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(BwlApplication.class);

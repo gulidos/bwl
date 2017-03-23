@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.rik.bwl.domain.Port;
+import ru.rik.bwl.domain.WhiteNumber;
 
 @Component
 public class BwlScript extends BaseAgiScript {
 	private static final Logger logger = LoggerFactory.getLogger(BwlScript.class);
 	
 	@Autowired ShortBuff shortBuff;
-	@Autowired WlRepo wlrepo;
+	@Autowired Requests requests;
 	@Autowired PortRepo ports;
 	
 	public BwlScript() {
@@ -31,12 +32,15 @@ public class BwlScript extends BaseAgiScript {
 	
 		if (shortBuff.in(exten)) {
 			logger.info("peer:{} src:{} dst:{} reject too early", peer, src, exten);
+			exec("hangup", "34");
 			hangup();
 			return;
 		}	
 		
-		if (wlrepo.findOne(r.getExtension()) == null) {
+		WhiteNumber wn = requests.requestWl(exten);
+		if (wn == null) {
 			logger.info("peer:{} src:{} dst:{} reject is not whitelisted", peer, src, exten);
+			exec("hangup", "34");
 			hangup();
 			return;
 		} 	
@@ -45,7 +49,7 @@ public class BwlScript extends BaseAgiScript {
 		if (p != null) 
 			ch.setExtension(p.getMncFormatted() + exten);
 		
-		logger.info("peer:{} src:{} dst:{} allow whitelisted", peer, src, exten);
+		logger.info("peer:{} src:{} dst:{} tag: {} allow whitelisted", peer, src, exten, wn.getTag());
 		ch.setContext("a2billing");
 	}
 	

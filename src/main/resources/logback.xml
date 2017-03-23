@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds" debug="true">
+
+	<appender name="core-log"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>/var/log/bwl.log</file>
+		<encoder>
+			<pattern>
+				<charset>UTF-8</charset>
+				%d{HH:mm:ss.SSS} %-5level [%thread] %logger{35}:%method:%line %msg%n
+			</pattern>
+		</encoder>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>/var/log/bwl.log.%d{yyyy-MM-dd}.gz
+			</fileNamePattern>
+			<!-- keep 180 days' worth of history, depends on rollover policy. Now 
+				daily policy. -->
+			<maxHistory>180</maxHistory>
+		</rollingPolicy>
+	</appender>
+
+	
+	<root level="INFO">
+   	 <appender-ref ref="core-log" />
+  	</root>
+
+
+	<logger 
+		name="org.asteriskjava" 
+		level="WARN" >
+		<appender-ref ref="core-log" />
+	</logger>
+</configuration>
