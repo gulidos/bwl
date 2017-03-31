@@ -14,7 +14,6 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name="whitelist")
-@Cacheable(cacheNames="Wlw")
 public class WhiteNumber {
 	@Id
 	private String number;

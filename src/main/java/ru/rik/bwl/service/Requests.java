@@ -9,9 +9,10 @@ import ru.rik.bwl.domain.WhiteNumber;
 
 @Component
 public class Requests {
-	@Autowired WlRepo wlrepo;
-	@Autowired PortRepo ports;
-	@Autowired CounterService counterService;
+	@Autowired 
+	WlRepo wlrepo;
+	@Autowired 
+	CounterService counterService;
 
 	public Requests() {}
 	

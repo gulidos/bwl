@@ -34,7 +34,6 @@ public class ShortBuff {
 	
 	@PostConstruct
 	public void init() {
-		System.out.println("Building cache... keepSeconds " + keepSeconds);
 		cache = Caffeine.newBuilder()
 				.initialCapacity(1000)
 				.recordStats()

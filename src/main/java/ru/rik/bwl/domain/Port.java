@@ -5,13 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.springframework.cache.annotation.Cacheable;
-
 import lombok.Data;
 @Entity
 @Data
 @Table(name="bdpn")
-@Cacheable(cacheNames="bdpn")
 public class Port {
 
 	@Id @Column(name="Number")
@@ -22,4 +19,4 @@ public class Port {
 		return String.format("%03d", mnc);
 		
 	}
-}
+} 
