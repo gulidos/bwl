@@ -45,8 +45,6 @@ public class BwlApplication implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 		logger.info(" !!! app is running!!! "); 
-		
-		for (String a : args.getNonOptionArgs())
-			System.out.println(a + "dsdsd ");  
+  
 	} 
 }
